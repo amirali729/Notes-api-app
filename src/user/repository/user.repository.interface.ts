@@ -1,4 +1,6 @@
+import { UserEntity } from '../model/user.entity';
+
 export interface IUserRepository {
-  login(): Promise<any>;
-  signUp(): Promise<any>;
+  login(): Promise<UserEntity>;
+  signUp(): Promise<UserEntity>;
 }

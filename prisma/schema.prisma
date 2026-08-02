@@ -13,20 +13,29 @@ datasource db {
   provider = "postgresql"
 }
 
-datasource db {
-  provider = "postgresql"
-}
 
 model User { 
   id    Int    @id @default(autoincrement()) 
-  name  String
+  username  String @unique
+  password String 
+  email String @unique
+  createdAt DateTime @default(now())
+  createdBy Int
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  isDeleted Boolean @default(false)
+  notes Note[]
 }
 
-model Post { 
+model Note { 
   id        Int     @id @default(autoincrement()) 
   title     String
   description String
-  published Boolean @default(true) 
+  createdAt DateTime @default(now())
+  createdBy Int  
+  isDeleted Boolean @default(false)
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime? 
   UserId  Int
   user    User    @relation(fields: [UserId], references: [id]) 
 } 
