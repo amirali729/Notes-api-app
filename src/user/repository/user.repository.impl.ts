@@ -1,12 +1,43 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../model/user.entity';
-import { IUserRepository } from './user.repository.interface';
+import { createdUsertypes, IUserRepository } from './user.repository.interface';
+import { PrismaService } from 'src/db/prisma';
 
+
+@Injectable()
 export class UserRepository implements IUserRepository {
-  async login(): Promise<UserEntity> {
-    await Promise.resolve('login');
+  constructor(private readonly prisma: PrismaService) {}
+  async create(user: createdUsertypes): Promise<UserEntity | Error> {
+    try {
+      const newUser: UserEntity = await this.prisma.user.create({
+        data: {
+          username: user.username,
+          email: user.email,
+          password: user.password,
+          createdBy: user.username,
+        },
+      });
+      return newUser;
+    } catch (error) {
+      return new Error('there is some problem with server ');
+    }
   }
 
-  async signUp(): Promise<any> {
-    await Promise.resolve('signUp');
+  async findUserbyUsername(username: string): Promise<UserEntity | Error> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          username: username,
+        },
+      });
+      if (!user) {
+        return new Error('User not found');
+      }
+      return user;
+    } catch (error) {
+      return new Error('there is some problem with server ');
+    }
   }
 }

@@ -20,7 +20,7 @@ model User {
   password String 
   email String @unique
   createdAt DateTime @default(now())
-  createdBy Int
+  createdBy String
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
   isDeleted Boolean @default(false)
@@ -32,7 +32,7 @@ model Note {
   title     String
   description String
   createdAt DateTime @default(now())
-  createdBy Int  
+  createdBy String
   isDeleted Boolean @default(false)
   updatedAt DateTime @updatedAt
   deletedAt DateTime? 
