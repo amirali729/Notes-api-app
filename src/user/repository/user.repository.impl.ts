@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../model/user.entity';
 import { createdUsertypes, IUserRepository } from './user.repository.interface';
 import { PrismaService } from 'src/db/prisma';
+import { Infrastructure } from 'src/exceptions/exception';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -19,8 +20,8 @@ export class UserRepository implements IUserRepository {
         },
       });
       return newUser;
-    } catch (error) {
-      return new Error('there is some problem with server ', error);
+    } catch {
+      throw new Infrastructure();
     }
   }
 
@@ -39,8 +40,8 @@ export class UserRepository implements IUserRepository {
         return 'User not found';
       }
       return user;
-    } catch (error) {
-      return new Error('there is some problem with server ', error);
+    } catch {
+      throw new Infrastructure();
     }
   }
 }
