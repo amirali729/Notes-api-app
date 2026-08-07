@@ -1,31 +1,41 @@
 import { JwtService } from 'src/services/jwt.service';
 import { SignUpUserDto } from '../dto/create-user.dto';
-import { IUserRepository } from '../repository/user.repository.interface';
+import type { IUserRepository } from '../repository/user.repository.interface';
 import { IUserService } from './user.service.interface';
 import * as bcrypt from 'bcrypt';
 import { SignUpResponse } from '../responses/signup.response';
+import { UserRepository } from '../repository/user.repository.impl';
+import { Inject, Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UserService implements IUserService {
   constructor(
+    @Inject(UserRepository)
     private readonly userRepository: IUserRepository,
     private readonly jwtService: JwtService,
   ) {}
 
-  async signup(user: SignUpUserDto): Promise<SignUpResponse | Error> {
+  async signUp(user: SignUpUserDto): Promise<SignUpResponse | Error | string> {
     try {
+      console.log(user);
       const userfound = await this.userRepository.findUserbyUsername(
         user.username,
       );
-      if (userfound) {
+      console.log(userfound);
+      if (userfound != 'User not found') {
+        console.log('hello');
         return new Error('account already created please login');
       }
+      console.log('hel');
       const hashedPassword = await bcrypt.hash(user.password, 10);
       const createdUser = await this.userRepository.create({
         username: user.username,
         password: hashedPassword,
         email: user.email,
-        createdby: user.username,
+        createdBy: user.username,
       });
+      console.log(createdUser);
+      // return createdUser;
       return createdUser;
     } catch (error) {
       // normalize caught value to Error
@@ -33,7 +43,7 @@ export class UserService implements IUserService {
     }
   }
 
-  login(): Promise<any> {
-    return this.userRepository.signUp();
-  }
+  // login(): Promise<any> {
+  //   return this.userRepository.signUp();
+  // }
 }

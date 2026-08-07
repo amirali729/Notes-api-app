@@ -13,7 +13,7 @@ export interface UserEntity {
   password: string;
   email: string;
   createdAt: Date;
-  createdBy: number;
+  createdBy: string;
   updatedAt: Date;
   deletedAt?: Date | null;
   isDeleted: boolean;

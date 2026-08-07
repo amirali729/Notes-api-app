@@ -8,10 +8,14 @@ export class UserController {
   @Post('register')
   async SignUp(@Body() signupData: SignUpUserDto) {
     try {
-      return await this.userService.signup(signupData);
-    } 
-}
-
+      console.log(signupData);
+      const response = await this.userService.signUp(signupData);
+      // console.log(response);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   @Get('login')
   Login() {}

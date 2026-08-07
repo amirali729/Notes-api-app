@@ -20,6 +20,7 @@ export class PrismaService
   async onModuleInit() {
     // Connect to the database when the NestJS application starts
     await this.$connect();
+    console.log('database is connected');
   }
 
   async onModuleDestroy() {

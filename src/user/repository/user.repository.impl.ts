@@ -5,11 +5,10 @@ import { UserEntity } from '../model/user.entity';
 import { createdUsertypes, IUserRepository } from './user.repository.interface';
 import { PrismaService } from 'src/db/prisma';
 
-
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaService) {}
-  async create(user: createdUsertypes): Promise<UserEntity | Error> {
+  async create(user: createdUsertypes): Promise<UserEntity | Error | string> {
     try {
       const newUser: UserEntity = await this.prisma.user.create({
         data: {
@@ -21,23 +20,27 @@ export class UserRepository implements IUserRepository {
       });
       return newUser;
     } catch (error) {
-      return new Error('there is some problem with server ');
+      return new Error('there is some problem with server ', error);
     }
   }
 
-  async findUserbyUsername(username: string): Promise<UserEntity | Error> {
+  async findUserbyUsername(
+    username: string,
+  ): Promise<UserEntity | Error | string> {
     try {
+      console.log(username);
       const user = await this.prisma.user.findFirst({
         where: {
           username: username,
         },
       });
+      console.log(user);
       if (!user) {
-        return new Error('User not found');
+        return 'User not found';
       }
       return user;
     } catch (error) {
-      return new Error('there is some problem with server ');
+      return new Error('there is some problem with server ', error);
     }
   }
 }
