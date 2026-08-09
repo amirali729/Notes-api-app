@@ -6,7 +6,7 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { SignUpUserDto } from '../dto/create-user.dto';
+import { SignUpUserDto, loginUserDto } from '../dto/create-user.dto';
 import { UserService } from '../services/user.service.impl';
 
 @Controller('user')
@@ -19,7 +19,9 @@ export class UserController {
   }
 
   @Get('login')
-  Login() {}
+  Login(@Body() loginData: loginUserDto) {
+    return this.userService.login(loginData);
+  }
 
   @Get(':id')
   GetUser() {}

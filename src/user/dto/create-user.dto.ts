@@ -15,3 +15,15 @@ export class SignUpUserDto {
   @MinLength(8, { message: 'password must be at least 8 characters long' })
   password: string;
 }
+
+export class loginUserDto {
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3, { message: 'username must be at least 3 characters long' })
+  username: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8, { message: 'password must be at least 8 characters long' })
+  password: string;
+}

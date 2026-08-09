@@ -1,15 +1,17 @@
 import { JwtService } from 'src/services/jwt.service';
-import { SignUpUserDto } from '../dto/create-user.dto';
+import { loginUserDto, SignUpUserDto } from '../dto/create-user.dto';
 import type { IUserRepository } from '../repository/user.repository.interface';
 import { IUserService } from './user.service.interface';
 import * as bcrypt from 'bcrypt';
-import { SignUpResponse } from '../responses/signup.response';
+import { LoginResponse, SignUpResponse } from '../responses/user.response';
 import { UserRepository } from '../repository/user.repository.impl';
 import {
+  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 
 @Injectable()
@@ -21,14 +23,12 @@ export class UserService implements IUserService {
   ) {}
 
   async signUp(user: SignUpUserDto): Promise<SignUpResponse> {
-    console.log(user);
     const userfound = await this.userRepository.findUserbyUsername(
       user.username,
     );
     if (userfound) {
       throw new ConflictException('user already exist');
     }
-    console.log('hel');
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const createdUser = await this.userRepository.create({
       username: user.username,
@@ -45,7 +45,44 @@ export class UserService implements IUserService {
     };
   }
 
-  // login(): Promise<any> {
-  //   return this.userRepository.signUp();
-  // }
+  async login(user: loginUserDto): Promise<LoginResponse> {
+    const userFound = await this.userRepository.findUserbyUsername(
+      user.username,
+    );
+    if (!userFound) {
+      throw new NotFoundException(
+        'username doesnt exist Please first Create account',
+        {
+          cause: new Error(),
+          description: 'user not found',
+        },
+      );
+    }
+    const verifyPassword = await bcrypt.compare(
+      user.password,
+      userFound.password,
+    );
+    console.log(verifyPassword);
+    if (!verifyPassword) {
+      throw new BadRequestException('your password is incorrect', {
+        cause: new Error(),
+        description: 'incorrect password',
+      });
+    }
+
+    const accesstoken = this.jwtService.createAccessToken({
+      username: userFound.username,
+      email: userFound.email,
+    });
+    const refreshToken = this.jwtService.createRefreshToken({
+      username: userFound.username,
+      email: userFound.email,
+    });
+    return {
+      username: userFound.username,
+      email: userFound.email,
+      accessToken: accesstoken,
+      refreshToken: refreshToken,
+    };
+  }
 }

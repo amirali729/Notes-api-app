@@ -25,13 +25,24 @@ export class UserRepository implements IUserRepository {
 
   async findUserbyUsername(username: string): Promise<UserEntity | null> {
     try {
-      console.log(username);
       const user = await this.prisma.user.findFirst({
         where: {
           username: username,
         },
       });
       return user;
+    } catch {
+      throw new Infrastructure();
+    }
+  }
+  findPassword(password: string): Promise<UserEntity | null> {
+    try {
+      const userpassword = this.prisma.user.findFirst({
+        where: {
+          password: password,
+        },
+      });
+      return userpassword;
     } catch {
       throw new Infrastructure();
     }
