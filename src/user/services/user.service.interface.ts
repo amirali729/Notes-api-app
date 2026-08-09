@@ -4,5 +4,5 @@ import { SignUpResponse } from '../responses/signup.response';
 
 export interface IUserService {
   // login(): Promise<LoginResponse>;
-  signUp(user: SignUpUserDto): Promise<SignUpResponse | Error | string>;
+  signUp(user: SignUpUserDto): Promise<SignUpResponse>;
 }
