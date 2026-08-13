@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 
 type JwtData = {
@@ -35,8 +35,8 @@ export class JwtService {
       const secret = process.env.ACCESS_SCERET_TOKEN as jwt.Secret;
       const payload = jwt.verify(token, secret);
       return payload;
-    } catch (error: any) {
-      return new Error('jwt Error', error);
+    } catch {
+      throw new InternalServerErrorException();
     }
   }
   verifyRefreshToken(token: string) {
@@ -44,8 +44,8 @@ export class JwtService {
       const secret = process.env.REFRESH_SCERET_TOKEN as jwt.Secret;
       const payload = jwt.verify(token, secret);
       return payload;
-    } catch (error: any) {
-      return new Error('jwt Error', error);
+    } catch {
+      throw new InternalServerErrorException();
     }
   }
 }

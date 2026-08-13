@@ -29,7 +29,7 @@ model User {
 
 model Note { 
   id        Int     @id @default(autoincrement()) 
-  title     String
+  title     String  @unique
   description String
   createdAt DateTime @default(now())
   createdBy String
