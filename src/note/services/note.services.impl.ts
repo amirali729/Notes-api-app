@@ -6,12 +6,16 @@ import {
 import { NoteRespository } from '../repository/note.repository.impl';
 import { INoteService } from './note.service.interface';
 import { createNoteDto } from '../dto/create.note.dto';
+import { createNoteResponse } from '../responses/note.response';
 
 @Injectable()
 export class NoteService implements INoteService {
   constructor(private readonly NotesRepository: NoteRespository) {}
 
-  async create(createNoteDto: createNoteDto, userId: number): Promise<any> {
+  async create(
+    createNoteDto: createNoteDto,
+    userId: number,
+  ): Promise<createNoteResponse> {
     const notefound = await this.NotesRepository.findNotesByTitle(
       createNoteDto.title,
     );

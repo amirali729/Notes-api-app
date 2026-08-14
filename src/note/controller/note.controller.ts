@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { NoteService } from '../services/note.services.impl';
 import { createNoteDto } from '../dto/create.note.dto';
@@ -13,8 +14,9 @@ export class NoteController {
     @Request() req: any,
     @Body() CreateNoteData: createNoteDto,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const response = await this.NotesService.create(CreateNoteData, req.user.userId as number);
-    return response;
+    return await this.NotesService.create(
+      CreateNoteData,
+      req.user.userId as number,
+    );
   }
 }

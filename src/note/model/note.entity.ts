@@ -3,7 +3,7 @@ export interface NoteEntity {
   title: string;
   description: string;
   createdAt: Date;
-  createdBy: string;
+  createdBy: number;
   updatedAt: Date | null;
   deletedAt?: Date | null;
   isDeleted: boolean;
