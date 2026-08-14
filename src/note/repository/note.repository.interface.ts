@@ -4,7 +4,6 @@ export type createdNotetypes = {
   userId: number;
   title: string;
   description: string;
-  createdBy: string;
 };
 
 export interface INoteRespository {

@@ -71,10 +71,12 @@ export class UserService implements IUserService {
     }
 
     const accesstoken = this.jwtService.createAccessToken({
+      userId: userFound.id,
       username: userFound.username,
       email: userFound.email,
     });
     const refreshToken = this.jwtService.createRefreshToken({
+      userId: userFound.id,
       username: userFound.username,
       email: userFound.email,
     });

@@ -16,7 +16,7 @@ export class NoteRespository implements INoteRespository {
         data: {
           title: note.title,
           description: note.description,
-          createdBy: note.createdBy,
+          createdBy: note.userId,
           UserId: note.userId,
         },
       });

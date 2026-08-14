@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 
 type JwtData = {
+  userId: number;
   username: string;
   email: string;
 };
