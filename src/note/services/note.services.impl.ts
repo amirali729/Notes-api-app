@@ -19,7 +19,7 @@ export class NoteService implements INoteService {
     const notefound = await this.NotesRepository.findNotesByTitle(
       createNoteDto.title,
     );
-    if (!notefound) {
+    if (notefound) {
       throw new ConflictException('title with this note is already exist');
     }
 

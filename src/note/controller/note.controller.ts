@@ -9,7 +9,7 @@ export class NoteController {
   constructor(private readonly NotesService: NoteService) {}
 
   @UseGuards(AuthGuard)
-  @Post()
+  @Post('register')
   async CreateNotes(
     @Request() req: any,
     @Body() CreateNoteData: createNoteDto,
