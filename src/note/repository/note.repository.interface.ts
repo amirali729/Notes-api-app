@@ -7,6 +7,8 @@ export type createdNotetypes = {
 };
 
 export interface INoteRespository {
-  findNotesByTitle(title: string): Promise<NoteEntity | null>;
+  findNotesByTitle(title: string, userId: number): Promise<NoteEntity | null>;
   createNotes(note: createdNotetypes): Promise<NoteEntity | null>;
+  deleteNoteBytitle(title: string): Promise<NoteEntity | null>;
+  findAllNotesByUser(userId: number): Promise<any>;
 }
