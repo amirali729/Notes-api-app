@@ -23,7 +23,7 @@ export class NoteRespository implements INoteRespository {
     return newNote;
   }
 
-  async findNotesByTitle(
+  async findNoteByTitle(
     title: string,
     userId: number,
   ): Promise<NoteEntity | null> {
@@ -64,11 +64,27 @@ export class NoteRespository implements INoteRespository {
       const userAllNotes = await this.prismaService.note.findMany({
         where: {
           UserId: userId,
+          isDeleted: false,
         },
       });
       return userAllNotes;
     } catch {
       throw new Infrastructure();
     }
+  }
+
+  async updateNoteTitle(title: string, noteId: number): Promise<NoteEntity> {
+    const updatedNoteAt = new Date();
+    const updatedNote = await this.prismaService.note.update({
+      where: {
+        id: noteId,
+      },
+      data: {
+        title: title,
+        updatedAt: updatedNoteAt,
+      },
+    });
+
+    return updatedNote;
   }
 }

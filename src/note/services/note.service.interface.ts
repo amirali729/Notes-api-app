@@ -9,5 +9,6 @@ export interface INoteService {
   ): Promise<createNoteResponse>;
   delete(deleteNoteDto: deleteNoteDto, userId: number): Promise<NoteEntity>;
   findNoteBytitle(deleteNote: deleteNoteDto, userId: number): Promise<any>;
-  findAllNotesByUserId(userId: number): Promise<any>;
+  findAllNotesByUserId(userId: number): Promise<NoteEntity[]>;
+  updateNote(noteId: number, title: string): Promise<any>;
 }

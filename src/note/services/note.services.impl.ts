@@ -19,7 +19,7 @@ export class NoteService implements INoteService {
     createNoteDto: createNoteDto,
     userId: number,
   ): Promise<createNoteResponse> {
-    const notefound = await this.NotesRepository.findNotesByTitle(
+    const notefound = await this.NotesRepository.findNoteByTitle(
       createNoteDto.title,
       userId,
     );
@@ -47,7 +47,7 @@ export class NoteService implements INoteService {
     deleteNoteDto: deleteNoteDto,
     userId: number,
   ): Promise<NoteEntity> {
-    const foundNote = await this.NotesRepository.findNotesByTitle(
+    const foundNote = await this.NotesRepository.findNoteByTitle(
       deleteNoteDto.title,
       userId,
     );
@@ -77,7 +77,7 @@ export class NoteService implements INoteService {
     deleteNote: deleteNoteDto,
     userId: number,
   ): Promise<any> {
-    const foundNote = await this.NotesRepository.findNotesByTitle(
+    const foundNote = await this.NotesRepository.findNoteByTitle(
       deleteNote.title,
       userId,
     );
@@ -107,5 +107,24 @@ export class NoteService implements INoteService {
     }
 
     return userNotes;
+  }
+
+  async updateNote(noteId: number, title: string): Promise<NoteEntity> {
+    const updatedUserNote = await this.NotesRepository.updateNoteTitle(
+      title,
+      noteId,
+    );
+
+    if (!updatedUserNote) {
+      throw new NotFoundException(
+        'note by this title doesnot exist please first create note',
+        {
+          cause: new Error(),
+          description: 'note not found',
+        },
+      );
+    }
+
+    return updatedUserNote;
   }
 }
