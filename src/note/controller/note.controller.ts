@@ -4,6 +4,8 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
+  Patch,
   Post,
   Request,
   UseGuards,
@@ -17,7 +19,7 @@ export class NoteController {
   constructor(private readonly NotesService: NoteService) {}
 
   @UseGuards(AuthGuard)
-  @Post('register')
+  @Post('create')
   async CreateNote(@Request() req: any, @Body() CreateNoteData: createNoteDto) {
     return await this.NotesService.create(
       CreateNoteData,
@@ -37,8 +39,17 @@ export class NoteController {
   }
 
   @UseGuards(AuthGuard)
-  @Get()
+  @Get('')
   async findAllNotes(@Request() req: any) {
     return this.NotesService.findAllNotesByUserId(req.user.userId as number);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch(':note-id/update')
+  async updateNoteTitle(
+    @Param('note-id') noteId: string,
+    @Body() title: string,
+  ) {
+    return this.NotesService.updateNote(Number(noteId), title);
   }
 }

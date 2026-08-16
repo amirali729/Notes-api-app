@@ -28,6 +28,7 @@ export class UserRepository implements IUserRepository {
       const user = await this.prisma.user.findFirst({
         where: {
           username: username,
+          isDeleted: false,
         },
       });
       return user;
@@ -35,14 +36,38 @@ export class UserRepository implements IUserRepository {
       throw new Infrastructure();
     }
   }
-  findPassword(password: string): Promise<UserEntity | null> {
+  async changedPassword(
+    newPassword: string,
+    userId: number,
+  ): Promise<UserEntity> {
     try {
-      const userpassword = this.prisma.user.findFirst({
+      const newUpdatedTime = new Date();
+      const userpassword = await this.prisma.user.update({
         where: {
-          password: password,
+          id: userId,
+          isDeleted: false,
+        },
+        data: {
+          password: newPassword,
+          updatedAt: newUpdatedTime,
         },
       });
       return userpassword;
+    } catch {
+      throw new Infrastructure();
+    }
+  }
+
+  async findUserById(userId: number): Promise<UserEntity | null> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          id: userId,
+          isDeleted: false,
+        },
+      });
+
+      return user;
     } catch {
       throw new Infrastructure();
     }

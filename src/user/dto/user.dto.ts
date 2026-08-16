@@ -27,3 +27,15 @@ export class loginUserDto {
   @MinLength(8, { message: 'password must be at least 8 characters long' })
   password: string;
 }
+
+export class passwordChangedDto {
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8, { message: 'password must be at least 8 characters long' })
+  oldPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(8, { message: 'password must be at least 8 characters long' })
+  newPassword: string;
+}

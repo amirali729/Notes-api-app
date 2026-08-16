@@ -1,5 +1,5 @@
 import { JwtService } from 'src/services/jwt.service';
-import { loginUserDto, SignUpUserDto } from '../dto/create-user.dto';
+import { loginUserDto, SignUpUserDto } from '../dto/user.dto';
 import type { IUserRepository } from '../repository/user.repository.interface';
 import { IUserService } from './user.service.interface';
 import * as bcrypt from 'bcrypt';
@@ -62,7 +62,6 @@ export class UserService implements IUserService {
       user.password,
       userFound.password,
     );
-    console.log(verifyPassword);
     if (!verifyPassword) {
       throw new BadRequestException('your password is incorrect', {
         cause: new Error(),
@@ -86,5 +85,45 @@ export class UserService implements IUserService {
       accessToken: accesstoken,
       refreshToken: refreshToken,
     };
+  }
+
+  async changedUserPassword(
+    userId: number,
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<any> {
+    const userFound = await this.userRepository.findUserById(userId);
+    if (!userFound) {
+      throw new NotFoundException(
+        'username doesnt exist Please first Create account',
+        {
+          cause: new Error(),
+          description: 'user not found',
+        },
+      );
+    }
+    const verifyPassword = await bcrypt.compare(
+      oldPassword,
+      userFound.password,
+    );
+    if (!verifyPassword) {
+      throw new BadRequestException('your password is incorrect', {
+        cause: new Error(),
+        description: 'incorrect password',
+      });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const newUserPassword = await this.userRepository.changedPassword(
+      hashedPassword,
+      userId,
+    );
+    if (!newUserPassword) {
+      throw new InternalServerErrorException('password changed failed');
+    }
+    const passwordChangedResponse = {
+      username: newUserPassword.username,
+      updatedAt: newUserPassword.updatedAt,
+    };
+    return passwordChangedResponse;
   }
 }

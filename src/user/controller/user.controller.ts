@@ -4,9 +4,14 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
 } from '@nestjs/common';
-import { SignUpUserDto, loginUserDto } from '../dto/create-user.dto';
+import {
+  SignUpUserDto,
+  loginUserDto,
+  passwordChangedDto,
+} from '../dto/user.dto';
 import { UserService } from '../services/user.service.impl';
 
 @Controller('user')
@@ -26,6 +31,16 @@ export class UserController {
   @Get(':id')
   GetUser() {}
 
-  @Post('logout')
-  Logout() {}
+  @Post(':id/changedPassword')
+  Logout(
+    @Param(':id') userId: string,
+    @Body() passwordDto: passwordChangedDto,
+  ) {
+    const { oldPassword, newPassword } = passwordDto;
+    return this.userService.changedUserPassword(
+      Number(userId),
+      oldPassword,
+      newPassword,
+    );
+  }
 }
