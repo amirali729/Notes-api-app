@@ -92,7 +92,9 @@ export class UserService implements IUserService {
     oldPassword: string,
     newPassword: string,
   ): Promise<any> {
+    console.log(`this is the users password ${oldPassword} ${newPassword}`);
     const userFound = await this.userRepository.findUserById(userId);
+    console.log(userFound);
     if (!userFound) {
       throw new NotFoundException(
         'username doesnt exist Please first Create account',
@@ -117,6 +119,7 @@ export class UserService implements IUserService {
       hashedPassword,
       userId,
     );
+    console.log(newUserPassword);
     if (!newUserPassword) {
       throw new InternalServerErrorException('password changed failed');
     }

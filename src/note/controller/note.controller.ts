@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { NoteService } from '../services/note.services.impl';
-import { createNoteDto, deleteNoteDto } from '../dto/note.dto';
+import { createNoteDto, deleteNoteDto, findNoteDto } from '../dto/note.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guards';
 
 @Controller('notes')
@@ -34,9 +34,9 @@ export class NoteController {
   }
   @UseGuards(AuthGuard)
   @Post('your-note')
-  async findNote(@Request() req: any, @Body() deleteNoteData: deleteNoteDto) {
+  async findNote(@Request() req: any, @Body() findNoteDto: findNoteDto) {
     return this.NotesService.findNoteBytitle(
-      deleteNoteData,
+      findNoteDto,
       req.user.userId as number,
     );
   }

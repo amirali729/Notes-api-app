@@ -28,19 +28,16 @@ export class UserController {
     return this.userService.login(loginData);
   }
 
-  @Get(':id')
-  GetUser() {}
+  // @Param() params: any): string
 
-  @Post(':id/changedPassword')
+  @Post('/:id/changedPassword')
   Logout(
-    @Param(':id') userId: string,
+    @Param() params: { id: string },
     @Body() passwordDto: passwordChangedDto,
   ) {
     const { oldPassword, newPassword } = passwordDto;
-    return this.userService.changedUserPassword(
-      Number(userId),
-      oldPassword,
-      newPassword,
-    );
+    const id = Number(params.id);
+    console.log(id);
+    return this.userService.changedUserPassword(id, oldPassword, newPassword);
   }
 }

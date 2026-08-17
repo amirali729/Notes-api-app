@@ -60,13 +60,14 @@ export class UserRepository implements IUserRepository {
 
   async findUserById(userId: number): Promise<UserEntity | null> {
     try {
+      console.log(userId);
       const user = await this.prisma.user.findFirst({
         where: {
           id: userId,
           isDeleted: false,
         },
       });
-
+      console.log(user);
       return user;
     } catch {
       throw new Infrastructure();
