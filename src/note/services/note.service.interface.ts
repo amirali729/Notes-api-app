@@ -1,6 +1,9 @@
-import { createNoteDto, deleteNoteDto } from '../dto/create.note.dto';
+import { createNoteDto, deleteNoteDto } from '../dto/note.dto';
 import { NoteEntity } from '../model/note.entity';
-import { createNoteResponse } from '../responses/note.response';
+import {
+  createNoteResponse,
+  singleNoteResponse,
+} from '../responses/note.response';
 
 export interface INoteService {
   create(
@@ -8,7 +11,10 @@ export interface INoteService {
     userId: number,
   ): Promise<createNoteResponse>;
   delete(deleteNoteDto: deleteNoteDto, userId: number): Promise<NoteEntity>;
-  findNoteBytitle(deleteNote: deleteNoteDto, userId: number): Promise<any>;
+  findNoteBytitle(
+    deleteNote: deleteNoteDto,
+    userId: number,
+  ): Promise<singleNoteResponse>;
   findAllNotesByUserId(userId: number): Promise<NoteEntity[]>;
-  updateNote(noteId: number, title: string): Promise<any>;
+  updateNote(noteId: number, title: string): Promise<NoteEntity>;
 }

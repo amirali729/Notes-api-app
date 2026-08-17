@@ -6,8 +6,11 @@ import {
 } from '@nestjs/common';
 import { NoteRespository } from '../repository/note.repository.impl';
 import { INoteService } from './note.service.interface';
-import { createNoteDto, deleteNoteDto } from '../dto/create.note.dto';
-import { createNoteResponse } from '../responses/note.response';
+import { createNoteDto, deleteNoteDto } from '../dto/note.dto';
+import {
+  createNoteResponse,
+  singleNoteResponse,
+} from '../responses/note.response';
 import { NoteEntity } from '../model/note.entity';
 import { Infrastructure } from 'src/exceptions/exception';
 
@@ -76,7 +79,7 @@ export class NoteService implements INoteService {
   async findNoteBytitle(
     deleteNote: deleteNoteDto,
     userId: number,
-  ): Promise<any> {
+  ): Promise<singleNoteResponse> {
     const foundNote = await this.NotesRepository.findNoteByTitle(
       deleteNote.title,
       userId,
@@ -90,8 +93,12 @@ export class NoteService implements INoteService {
         },
       );
     }
-
-    return foundNote;
+    const singleNoteResponse = {
+      noteId: foundNote.id,
+      title: foundNote.title,
+      description: foundNote.description,
+    };
+    return singleNoteResponse;
   }
 
   async findAllNotesByUserId(userId: number): Promise<NoteEntity[]> {

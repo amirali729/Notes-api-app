@@ -14,7 +14,7 @@ import {
 } from '../dto/user.dto';
 import { UserService } from '../services/user.service.impl';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Post('register')

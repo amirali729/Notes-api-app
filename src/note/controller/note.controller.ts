@@ -11,10 +11,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { NoteService } from '../services/note.services.impl';
-import { createNoteDto, deleteNoteDto } from '../dto/create.note.dto';
+import { createNoteDto, deleteNoteDto } from '../dto/note.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guards';
 
-@Controller('note')
+@Controller('notes')
 export class NoteController {
   constructor(private readonly NotesService: NoteService) {}
 
@@ -35,7 +35,10 @@ export class NoteController {
   @UseGuards(AuthGuard)
   @Post('your-note')
   async findNote(@Request() req: any, @Body() deleteNoteData: deleteNoteDto) {
-    return this.NotesService.delete(deleteNoteData, req.user.userId as number);
+    return this.NotesService.findNoteBytitle(
+      deleteNoteData,
+      req.user.userId as number,
+    );
   }
 
   @UseGuards(AuthGuard)
