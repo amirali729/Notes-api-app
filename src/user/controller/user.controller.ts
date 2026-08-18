@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   SignUpUserDto,
@@ -13,6 +14,7 @@ import {
   passwordChangedDto,
 } from '../dto/user.dto';
 import { UserService } from '../services/user.service.impl';
+import { AuthGuard } from 'src/auth/guards/auth.guards';
 
 @Controller('users')
 export class UserController {
@@ -29,7 +31,7 @@ export class UserController {
   }
 
   // @Param() params: any): string
-
+  @UseGuards(AuthGuard)
   @Post('/:id/changedPassword')
   Logout(
     @Param() params: { id: string },
